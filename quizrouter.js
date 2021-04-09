@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const MongoClient = require('mongodb').MongoClient;
 var ObjectID = require('mongodb').ObjectID;
+
 router.get("/",(req,res)=>{
     MongoClient.connect("mongodb://localhost:27017", { useUnifiedTopology: true },
     (err,client)=>{
@@ -10,20 +11,19 @@ router.get("/",(req,res)=>{
             console.log(data)
             res.json(data);
             client.close();
-        })
-        
+        })        
     })    
 })
+
 router.post("/",(req,res)=>{    
+    console.log(req.body)
     MongoClient.connect("mongodb://localhost:27017", { useUnifiedTopology: true },
     (err,client)=>{
         var db = client.db("quiz");        
-        db.collection("question").insertOne(req.body).then((newobj)=>{
-            res.json(newobj)
-            client.close();
-        })       
+        db.collection("question").insertMany(req.body).then(data=>{res.json(data)})
     })    
 })
+
 router.delete("/:id",(req,res)=>{    
     console.log(req.params)
     MongoClient.connect("mongodb://localhost:27017", { useUnifiedTopology: true },
@@ -37,6 +37,7 @@ router.delete("/:id",(req,res)=>{
     })    
     res.send("Lets see the delete")
 })
+
 router.put("/:id",(req,res)=>{    
     console.log(req.params);
     MongoClient.connect("mongodb://localhost:27017", { useUnifiedTopology: true },
@@ -49,4 +50,5 @@ router.put("/:id",(req,res)=>{
         .catch((err)=>{console.log(err)})
     })    
 })
+
 module.exports = router;
