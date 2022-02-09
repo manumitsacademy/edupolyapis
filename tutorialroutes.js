@@ -19,19 +19,23 @@ router.post("/addTutorial",(req,res)=>{
 })
 router.post("/addConcept",(req,res)=>{
     console.log(req.body)
-    var newconcept = new concept(req.body);
+    var newconcept = new concept({...req.body,topicSequence:[]});
     newconcept.save((err,data)=>{
         console.log(err)
+		console.log("newconcept",data)
         res.json(data)
     })    
 })
 router.post("/addTopic",(req,res)=>{
-    //console.log(req.body)
+    console.log("topicreqbody",req.body)
+	if(!req.body['_id']){
+		delete req.body['_id'];
+	}
     var newtopic = new topic(req.body);
     newtopic.save((err,data)=>{
-        console.log(err,data)
+        console.log("data:123",err,data)
         concept.findByIdAndUpdate(req.body.conceptId,{           
-            $push: {"topicSequence":data._id}            
+            $push: {"topicSequence":{topicId:data['_id'],topicTitle:data['title']}}            
         }).then((updateResponse)=>{
             console.log("Updated Responce",updateResponse)
         })
@@ -47,10 +51,16 @@ router.get("/technologiesList",(req,res)=>{
 
 router.get("/tutorialListByTechnologyId",(req,res)=>{
     console.log(req.query)
-    tutorial.find({"technologyId":req.query.technologyId}).then((data)=>{
-        console.log("tutorialListByTechnologyId Req");       
-        res.json(data)
-    })
+	if(req.query.technologyId){
+		tutorial.find({"technologyId":req.query.technologyId}).then((data)=>{
+			console.log("tutorialListByTechnologyId Req");       
+			res.json(data)
+		})
+	}
+	else{
+		res.json({"msg":"no proper request"})
+	}
+    
 })
 router.get("/conceptListByTutorialId",(req,res)=>{
     console.log(req.query);
