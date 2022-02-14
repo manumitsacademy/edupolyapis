@@ -15,9 +15,11 @@ app.use(express.static(__dirname+"/public"))
 var cors = require("cors");
 var cookieParser = require('cookie-parser');
 var tutorialroutes = require("./tutorialroutes");
+var quizroutes = require("./quizroutes")
 app.use(cors())
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
 app.use("/tutorial",tutorialroutes)
+app.use("/quiz",quizroutes)
 app.listen(4000,()=>{console.log("server running on 4000")});
