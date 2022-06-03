@@ -103,7 +103,7 @@ router.delete("/deleteTopicById/:topicId/:conceptId", (req, res) => {
             res.json(data) 
         }
         else {
-            res.json({msg:"error vachindi"})
+            res.json({msg:"error is there"})
         }
     });
 })
