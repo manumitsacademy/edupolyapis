@@ -17,7 +17,7 @@ var cookieParser = require('cookie-parser');
 var tutorialroutes = require("./tutorialroutes");
 app.use(cors())
 app.use(cookieParser());
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use("/tutorial",tutorialroutes)
 app.listen(4000,()=>{console.log("server running on 4000")});
